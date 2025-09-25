@@ -1,8 +1,14 @@
 import reviews from "@/app/data/reviews.json";
 
+// GET all reviews
+export async function GET() {
+  return Response.json(reviews);
+}
+
+// POST new review
 export async function POST(request) {
   try {
-    const body = await request.json(); // يقرأ الـ JSON من الطلب
+    const body = await request.json();
     if (!body.bookId || !body.content || !body.reviewer) {
       return Response.json({ error: "Invalid review data" }, { status: 400 });
     }
@@ -12,11 +18,10 @@ export async function POST(request) {
       ...body,
     };
 
-    reviews.push(newReview); // هذه في الذاكرة فقط
+    reviews.push(newReview); // ملاحظة: هذا فقط في الذاكرة، مش في ملف JSON
 
     return Response.json(newReview, { status: 201 });
   } catch (error) {
-    console.error(error); // سيطبع الخطأ في logs
     return Response.json({ error: "Failed to add review" }, { status: 500 });
   }
 }
